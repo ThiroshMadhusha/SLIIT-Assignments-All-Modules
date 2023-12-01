@@ -1,0 +1,146 @@
+package sport_items_storekeeper_consumer;
+
+import java.util.List;
+import java.util.Scanner;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import sport_items_storekeeper_producer.SportItems;
+
+
+
+public class Activator implements BundleActivator {
+
+	ServiceReference SportStoreServiceReference;
+	
+	Scanner sports = new Scanner(System.in);
+
+	public void start(BundleContext context) throws Exception {
+		SportStoreServiceReference = context.getServiceReference(SportStoreService.class.getName());
+		
+		@SuppressWarnings("unchecked")
+		
+		SportStoreService  StoreKeeperService = (SportStoreService) context.getService(StoreKeeperServiceReference);		//Instance of managerService
+		
+		do {
+		int selection = 7;
+		do {
+		System.out.println("\n--------------Welcome to Mobile Care Phone Shop Store Keeper Interface--------------- \n");
+	
+		System.out.println("Select an option to continue... \n");
+		
+		System.out.println("1.Add New Items Sport Hub Store ");
+		System.out.println("2.List All Available store Items in TMSD Sport Hub");
+		System.out.println("3.Search Available Sport Store Items");
+		System.out.println("4.Remove an Existing Sports Items in Store");
+		System.out.println("5.Exit To Store Interface \n");
+		
+		System.out.println("Enter your option :");
+		 selection = sports.nextInt();
+		
+		 sports.nextLine();
+		 if(selection == 5) {
+			 exit = true;
+		 }
+		 
+		 if(selection !=1 &&  selection !=2 && selection !=3 && selection !=4 && selection!=5) {
+			 System.out.println("Please enter a valid selection");
+		 }
+		}while(selection !=1  && selection !=2 && selection !=3 && selection !=4 && selection!=5 );
+		
+	
+        String  backToHome = null;
+		if (selection == 1) {//Handles the adding new items to the store
+			do {
+			System.out.println("Enter the New Item Name: ");
+			String mobileName = sports.nextLine();
+
+			System.out.println("Enter the stock quantity: ");
+			int quantity = sports.nextInt();
+			
+			sports.nextLine();
+			
+			
+			int result =StoreKeeperService.addItems(mobileName, quantity);
+			String msg = (result ==1) ? "Successfully added the item! \n" : "please enter a valid name";
+			System.out.println(msg);
+			System.out.println("Press 0 to navigate back to home or press any other key to continue...");
+			
+			backToHome=sports.nextLine();
+			
+			}
+			
+			while(!(backToHome.equals("0")));
+
+		}
+		else if (selection == 2) {//Handles the removing an existing item in the store
+			do {
+			System.out.println("Enter the item name you need remove:");
+
+			String mobileName = sports.nextLine();
+			int result =StoreKeeperService.removeItems1(mobileName);
+			   String msg = (result ==1) ? "Successfully Removed the item! \n" :"please enter a valid name";
+			   System.out.println(msg);
+              System.out.println("Press 0 to navigate back to home or press any other key to continue...");
+			
+			backToHome=sports.nextLine();
+			
+			}
+			
+			while(!(backToHome.equals("0")));
+
+		}
+		else if(selection == 3) {//Handles displaying all items in the store
+			do {
+				List<SportItems> itemsList =StoreKeeperService.listItems();//Consumes the ManagerService listItems()
+				System.out.println("=================Items in the store================");
+
+				System.out.println("Item ID:"+"\t"+"Item Name:"+"\t"+"quantity:"+"\t" );
+				
+			for(SportItems tempItem: itemsList ) {
+				System.out.println(tempItem.getMobileID()+"\t\t"+tempItem.getMobileName()+"\t\t"+tempItem.getQuantity()+"\t ");
+								
+			}
+			System.out.println("===================================================");
+            System.out.println("Press 0 to navigate back to home or press any other key to continue....");
+			
+			backToHome=input.nextLine();
+			
+			}
+			
+			while(!(backToHome.equals("0")));
+
+		}
+		else if(selection == 4) {//Handles the searching process of an existing item in the store
+			do {
+			
+			System.out.println("Enter the item name you need search");
+			
+
+			String mobileName = input.nextLine();
+			int result =StoreKeeperService.searchitems(mobileName);
+			 String msg = (result ==1) ? "Item found!" :"Item not found!";
+			   System.out.println(msg);
+			
+			System.out.println("Press 0 to navigate back to home or press any other key to continue...");
+			
+			backToHome=input.nextLine();
+			
+			}
+			
+			while(!(backToHome.equals("0")));
+		}
+		else if(selection == 5) { //Exits form the consumer program
+			return;
+		}
+	}while(!exit);
+	}
+	
+	@Override
+	public void stop(BundleContext context) throws Exception {//stop life cycle method
+		System.out.println("============Mobile Care Store Keeper Consumer Stopped.============");
+		context.ungetService(StoreKeeperServiceReference);
+	}
+
+}

@@ -1,0 +1,28 @@
+package sport_supplier_consumer;
+
+import java.util.Scanner;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import sport_supplier_producer.SportSupplierService;
+
+public class Activator implements BundleActivator {
+
+	ServiceReference SportSupplierServiceReference;
+	Scanner input = new Scanner(System.in);
+	
+	boolean exit =false;
+	
+	@Override
+	public void start(BundleContext bundleContext) throws Exception {
+		System.out.println("-----TMDS Sport Hub-----");
+		
+		SportSupplierServiceReference = context.getServiceReference(SportSupplierService.class.getName());
+	}
+
+	public void stop(BundleContext bundleContext) throws Exception {
+		Activator.context = null;
+	}
+
+}

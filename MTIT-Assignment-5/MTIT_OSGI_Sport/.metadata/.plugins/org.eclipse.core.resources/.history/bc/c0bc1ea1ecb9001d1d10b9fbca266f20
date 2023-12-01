@@ -1,0 +1,51 @@
+package sport_cashier_consumer;
+
+import java.util.ArrayList;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+import sport_cashier_producer.Sport_Items_Billing_Service;
+
+public class Activator implements BundleActivator {
+
+	private static BundleContext context =null;
+	
+	ServiceReference serviceReference;
+	private ServiceTracker serviceTracker=null;
+	boolean exit = false;
+
+	static BundleContext getContext() {
+		return context;
+	}
+
+	@SuppressWarnings("unchecked")
+	public void start(BundleContext context) throws Exception {
+		Activator.context = context;
+		
+		serviceTracker = new ServiceTracker(context,context.createFilter("(&(objectClass="+Sport_Items_Billing_Service.class.getName()+")"+"(Language=*))"),null);
+	
+		serviceTracker.open();
+		
+		int SportItemID;
+		int SportItemQuantity=0;
+		float Amount=0;
+		float discountPrice=(float) 0.10;
+		float TotalPrice=0;
+		int StokeHaveQuantity=10;
+		char chosedItem;
+		
+		
+		ArrayList<String> sports  new ArrayList<String>();
+		ArrayList<Float> SportPrice = new ArrayList<Float>();
+		
+		sports.add("Leather Bat \t");
+		SportPrice.add((float)27000.00);
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		Activator.context = null;
+	}
+
+}

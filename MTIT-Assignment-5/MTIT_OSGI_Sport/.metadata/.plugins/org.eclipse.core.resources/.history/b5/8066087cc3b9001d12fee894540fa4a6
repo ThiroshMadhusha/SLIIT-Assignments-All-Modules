@@ -1,0 +1,27 @@
+package sport_cashier_consumer;
+
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.util.tracker.ServiceTracker;
+
+public class Activator implements BundleActivator {
+
+	private static BundleContext context =null;
+	
+	ServiceReference serviceReference;
+	private ServiceTracker serviceTracker=null;
+
+	static BundleContext getContext() {
+		return context;
+	}
+
+	public void start(BundleContext context) throws Exception {
+		Activator.context = context;
+	}
+
+	public void stop(BundleContext context) throws Exception {
+		Activator.context = null;
+	}
+
+}

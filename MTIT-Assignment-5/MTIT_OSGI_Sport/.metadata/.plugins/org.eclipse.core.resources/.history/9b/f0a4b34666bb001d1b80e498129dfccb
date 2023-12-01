@@ -1,0 +1,26 @@
+package sport_items_storekeeper_producer;
+
+import java.util.List;
+
+
+
+public interface SportStoreService {
+	
+	
+	
+	public int addItems(String sportName,int quantity);
+	public int removeItems1(String itemName);
+	public static   int searchitems(String itemName) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	
+	public List<SportItems> listItems1();
+
+	List<SportItems> listItems();
+
+//	List<SportItems> listItems1();     
+
+
+}

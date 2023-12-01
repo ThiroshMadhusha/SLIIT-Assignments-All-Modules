@@ -1,0 +1,15 @@
+package sport_supplier_producer;
+
+import java.util.List;
+
+public class SportSupplierServiceImpl implements SportSupplierService {
+
+	@Override
+	public synchronized int addItems(String sportName, double itemPrice, double discount) {
+		Sport newItem=new Sport(SportDataStore.itemList.size()+1,sportName,itemPrice, discount);
+		SportDataStore.itemList.add(newItem);
+		
+		return 1;
+	}
+	
+}

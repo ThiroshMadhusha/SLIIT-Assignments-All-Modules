@@ -1,0 +1,106 @@
+package sport_supplier_producer;
+
+import java.util.List;
+
+
+public class SportSupplierServicelmpl implements SportSupplierService {
+
+	@Override
+	public synchronized int  addItems(String sportName,double itemPrice,double discount) {
+
+		Sport newItem = new Sport(SportDataStore.itemsList.size() + 1, sportName, itemPrice, discount);
+		SportDataStore.itemsList.add(newItem);
+
+	return 1;		
+	}
+
+	@Override
+	public  synchronized int updateItems(String updatedItemName,double updatedItemPrice,double updatedItemDiscount) {
+		Sport itemToBeUpdated = null;
+		boolean invalid = true;
+		int count = -1;
+		for (Sport tempItem : SportDataStore.itemsList) {
+			count++;
+			if (tempItem.getSportName().equalsIgnoreCase(updatedItemName)) {
+
+				itemToBeUpdated = tempItem;
+				invalid = false;
+				break;
+			}
+		
+		}
+		if (!invalid) {
+
+			itemToBeUpdated.setMobileName(updatedItemName);
+			itemToBeUpdated.setItemPrice(updatedItemPrice);
+			itemToBeUpdated.setDiscount(updatedItemDiscount);
+			itemToBeUpdated.calculatefinalPriceInMobile();
+
+			MobileDataStore.itemsList.set(count, itemToBeUpdated);
+			return 1;
+
+		} else {
+			return -1;
+		}
+				
+	}
+
+	@Override
+	public  synchronized int removeItems1(String mobileName) {
+
+		boolean invalid = true;
+		int count = -1;
+		for (Mobile tempItem :MobileDataStore.itemsList) {
+			count++;
+			if (tempItem.getMobileName().equalsIgnoreCase(mobileName)) {
+			
+				invalid = false;
+				break;
+			}
+		}
+		if (!invalid) {
+
+			MobileDataStore.itemsList.remove(count);
+			return 1;
+
+		} else {
+			return -1;
+		}
+	}
+
+	@Override
+	public int searchitems(String mobileName) {
+		boolean valid = false;
+	
+		for (Mobile tempItem : MobileDataStore.itemsList) {
+		
+			if (tempItem.getMobileName().equalsIgnoreCase(mobileName)) {
+
+				valid = true;
+				break;
+
+			}			
+
+		}
+		if(valid) {
+			return 1;
+			
+		}
+		else {
+			return -1;
+		}
+		
+	}
+
+	@Override
+	public List<Mobile> listItems() {
+
+		return MobileDataStore.itemsList;
+	}
+
+	@Override
+	public List<Mobile> listItems1() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
